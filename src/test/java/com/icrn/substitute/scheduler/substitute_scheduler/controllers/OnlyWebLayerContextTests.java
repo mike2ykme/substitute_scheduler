@@ -14,11 +14,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest //Here we're asking for all the controllers, could ask for a single controller w/like @WbeMvcTest(HelloController.class)
+//@WebMvcTest //Here we're asking for all the controllers, could ask for a single controller w/like @WebMvcTest(HelloController.class)
+@WebMvcTest(HelloController.class)
 public class OnlyWebLayerContextTests {
 
-    @Autowired
-    private MockMvc mockMvc;
+//    @Autowired
+//    private MockMvc mockMvc;
+    @Test
+    public void load(){
+
+    }
     //The following will fail since we're only loading the web context
 //    @Test
 //    public void shouldReturnDefaultMessage() throws Exception{
