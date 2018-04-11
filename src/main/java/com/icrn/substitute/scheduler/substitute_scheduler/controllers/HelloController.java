@@ -11,12 +11,16 @@ import java.util.List;
 @RestController
 public class HelloController {
 
-    @Autowired
     Controller controller;
+
+
+    public HelloController(Controller controller) {
+        this.controller = controller;
+    }
 
     @RequestMapping("/")
     public String index(){
-        return "Greetings from Spring Boot!";
+        return "Hello World";
     }
 
     @RequestMapping("/allUsers")
