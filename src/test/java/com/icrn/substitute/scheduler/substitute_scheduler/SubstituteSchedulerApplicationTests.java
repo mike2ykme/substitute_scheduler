@@ -1,6 +1,6 @@
 package com.icrn.substitute.scheduler.substitute_scheduler;
 
-import com.icrn.substitute.scheduler.substitute_scheduler.controllers.HelloController;
+import com.icrn.substitute.scheduler.substitute_scheduler.controllers.BaseController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class SubstituteSchedulerApplicationTests {
 
     @Autowired
-    HelloController controller;
+    BaseController controller;
 
     @Test
     public void contextLoads() {

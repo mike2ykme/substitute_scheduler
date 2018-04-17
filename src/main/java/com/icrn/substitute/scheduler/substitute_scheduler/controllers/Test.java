@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller()
 @RequestMapping("/HelloWorld")
-public class HelloWorld {
+public class Test {
 
     private final GreetingService service;
 
-    public HelloWorld(GreetingService service) {
+    public Test(GreetingService service) {
         this.service = service;
     }
 
