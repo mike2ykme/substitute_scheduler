@@ -1,5 +1,6 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.model.User;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class BaseControllerTest {
     @Test
     public void canGetUsersIndex() throws  Exception{
         List<User> userList = new ArrayList<>();
-        userList.add(new User());
+        userList.add(new ExtUser());
         given(controller.getAllUsers())
                 .willReturn(userList);
 

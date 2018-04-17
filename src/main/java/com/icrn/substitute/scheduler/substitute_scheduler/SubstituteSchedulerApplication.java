@@ -1,15 +1,11 @@
 package com.icrn.substitute.scheduler.substitute_scheduler;
 
+import com.icrn.substitute.scheduler.substitute_scheduler.dao.ExtUserRepositoryInMemory;
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.dao.*;
-import org.apache.catalina.User;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Arrays;
 
 
 @SpringBootApplication
@@ -26,7 +22,9 @@ public class SubstituteSchedulerApplication {
 
     @Bean
     public UserRepository getUserRepository(){
-        return new UserRepositoryInMemory();
+
+//        return new UserRepositoryInMemory();
+        return new ExtUserRepositoryInMemory();
     }
     @Bean
     public SubstituteRepository getSubstituteRepository(){

@@ -1,6 +1,7 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
-import com.icrn.substitute.scheduler.substitute_scheduler.dao.UserRepository;
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
+import com.icrn.substitute.scheduler.substitute_scheduler.dao.MongoUserRepository;
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class BaseController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserRepository userRepository;
+    MongoUserRepository userRepository;
 
     @RequestMapping("/username")
     @ResponseBody
@@ -45,7 +46,7 @@ public class BaseController {
     @RequestMapping("/")
     public String index(Model model){
 
-        User user = new User();
+        ExtUser user = new ExtUser();
         user.setName("Micheal");
         user.setId(000000000000000001L);
 
