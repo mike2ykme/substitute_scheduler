@@ -1,7 +1,7 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.configuration;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
-import com.icrn.substitutes.dao.UserRepository;
+import com.icrn.substitutes.Controller;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,28 +14,19 @@ import java.util.Collection;
 @Component
 public class UserDetailsServiceRepo implements UserDetailsService {
 
-    UserRepository userRepository;
+    Controller controller;
 
-    public UserDetailsServiceRepo(UserRepository userRepository) {
-
-        this.userRepository = userRepository;
+    public UserDetailsServiceRepo(Controller controller) {
+        this.controller = controller;
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        System.out.println("HERE");
-        System.out.println("HERE");
-        System.out.println("HERE");
-        System.out.println("HERE");
-        System.out.println("HERE");
-        System.out.println("HERE");
-        return this.userRepository.getAllusers()
-                        .stream().filter(u -> u.getName() == name)
-                        .peek(System.out::println)
-                        .map(u ->new CustomUserDetails((ExtUser)u))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("No User Found"));
-//        return this.userRepository.findByName(name);
+        return this.controller.getAllUsers().stream()
+                .filter(user -> user.getName().equals(name))
+                .map(user -> new CustomUserDetails((ExtUser)user))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No User Found!!!"));
     }
 
     static class CustomUserDetails extends ExtUser implements UserDetails{
@@ -51,32 +42,32 @@ public class UserDetailsServiceRepo implements UserDetailsService {
         @Override
         public String getPassword() {
 
-            return this.getPassword();
+            return super.getPassword();
         }
 
         @Override
         public String getUsername() {
-            return this.getName();
+            return getName();
         }
 
         @Override
         public boolean isAccountNonExpired() {
-            return this.isEnabled();
+            return super.isActive();
         }
 
         @Override
         public boolean isAccountNonLocked() {
-            return this.isEnabled();
+            return super.isActive();
         }
 
         @Override
         public boolean isCredentialsNonExpired() {
-            return this.isEnabled();
+            return super.isActive();
         }
 
         @Override
         public boolean isEnabled() {
-            return this.isEnabled();
+            return super.isActive();
         }
     }
 }

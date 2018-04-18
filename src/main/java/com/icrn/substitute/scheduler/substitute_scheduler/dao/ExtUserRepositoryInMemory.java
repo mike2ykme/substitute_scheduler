@@ -2,8 +2,7 @@ package com.icrn.substitute.scheduler.substitute_scheduler.dao;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
 import com.icrn.substitutes.dao.UserRepository;
-import com.icrn.substitutes.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.icrn.substitutes.model.UserInterface;
 
 import java.util.List;
 import java.util.Map;
@@ -23,27 +22,25 @@ public class ExtUserRepositoryInMemory implements UserRepository {
         this.userMap = userMap;
     }
 
-    public Optional<ExtUser> getExtUserById(long userId){
-
-
-        return this.userMap.entrySet().stream()
-                .filter(e -> e.getValue().getId() == userId)
-                .map(Map.Entry::getValue)
-                .findAny();
-    }
-
-    @Override
-    public Optional<User> getUserById(long userId) {
-        return this.userMap.entrySet().stream()
-                .filter(e -> e.getValue().getId() == userId)
-//                .filter((entry) -> entry.getValue().getId() == userId)
+//    public Optional<ExtUser> getExtUserById(long userId){
+//
+//
+//        return this.userMap.entrySet().stream()
+//                .filter(e -> e.getValue().getId() == userId)
 //                .map(Map.Entry::getValue)
-                .map(e -> (User)e.getValue())
+//                .findAny();
+//    }
+
+    @Override
+    public Optional<UserInterface> getUserById(long userId) {
+        return this.userMap.entrySet().stream()
+                .filter(e -> e.getValue().getId() == userId)
+                .map(e -> (UserInterface)e.getValue())
                 .findAny();
     }
 
     @Override
-    public User saveUser(User user) {
+    public UserInterface saveUser(UserInterface user) {
         if (user.getId() ==0)
             user.setId(Math.abs((new Random()).nextLong()));
         if (user instanceof ExtUser)
@@ -54,9 +51,9 @@ public class ExtUserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public List<User> getAllusers() {
+    public List<UserInterface> getAllusers() {
         return this.userMap.entrySet().stream()
-                .map(entry -> (User)entry.getValue())
+                .map(entry -> entry.getValue())
                 .collect(Collectors.toList());
     }
 }

@@ -1,18 +1,16 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
-import com.icrn.substitute.scheduler.substitute_scheduler.dao.MongoUserRepository;
 import com.icrn.substitutes.Controller;
-import com.icrn.substitutes.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //@RestController
 @org.springframework.stereotype.Controller
@@ -20,21 +18,22 @@ public class BaseController {
 
 
     Controller controller;
+    PasswordEncoder passwordEncoder;
 
 
-    public BaseController(Controller controller) {
+    public BaseController(Controller controller, PasswordEncoder passwordEncoder) {
         this.controller = controller;
+        this.passwordEncoder = passwordEncoder;
     }
 
 //    @RequestMapping("/")
 //    public String index(){
 //        return "Hello World";
 //    }
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
-    @Autowired
-    MongoUserRepository userRepository;
+
+//    @Autowired
+//    UserRepository userRepository;
 
     @RequestMapping("/username")
     @ResponseBody
@@ -46,25 +45,7 @@ public class BaseController {
     @RequestMapping("/")
     public String index(Model model){
 
-        ExtUser user = new ExtUser();
-        user.setName("Micheal");
-        user.setId(000000000000000001L);
 
-        userRepository.save(user);
-        userRepository.findAll().stream().forEach(System.out::println);
-
-
-        System.out.println("password");
-        System.out.println(passwordEncoder.encode("password"));
-        System.out.println("admin");
-        System.out.println(passwordEncoder.encode("admin"));
-
-
-
-        controller.saveUser(user);
-        model.addAttribute("Users",controller.getAllUsers());
-        model.addAttribute("UserList",new ArrayList<User>());
-        model.addAttribute("me",user);
         return "home";
     }
 
@@ -72,8 +53,16 @@ public class BaseController {
     public String hello(){
         return "hello";
     }
+
     @RequestMapping("/allUsers")
-    public List<User> getAllUsers(){
-        return controller.getAllUsers();
+    @ResponseBody
+    public List<ExtUser> getAllUsers(){
+        return controller.getAllUsers().stream().map(e -> (ExtUser)e).collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "/postIt",method = RequestMethod.POST)
+    @ResponseBody
+    public String getPoster(){
+        return "something";
     }
 }

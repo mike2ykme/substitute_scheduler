@@ -1,10 +1,13 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -12,9 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-//        auth
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+        auth
+            .userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 //            .inMemoryAuthentication()
 //                .withUser("user")
 //                    .password("{bcrypt}$2a$10$f928v5niYkw56YbQiMlA0OOHVJPqKOjahIfTVtQn/4z9LQzR/E0yq")
@@ -23,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .withUser("admin")
 //                    .password("{bcrypt}$2a$10$CQvzWAEvOqVJteZpfNf7HOTh.FDggzNkrRpT6x14yfiF9UrS4r7zy")
 //                    .roles("USER","ADMIN");
-//    }
+    }
 
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception{
