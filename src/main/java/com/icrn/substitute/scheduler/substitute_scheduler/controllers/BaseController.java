@@ -26,14 +26,6 @@ public class BaseController {
         this.passwordEncoder = passwordEncoder;
     }
 
-//    @RequestMapping("/")
-//    public String index(){
-//        return "Hello World";
-//    }
-
-
-//    @Autowired
-//    UserRepository userRepository;
 
     @RequestMapping("/username")
     @ResponseBody
@@ -63,6 +55,12 @@ public class BaseController {
     @RequestMapping(value = "/postIt",method = RequestMethod.POST)
     @ResponseBody
     public String getPoster(){
-        return "something";
+        return "something else";
+    }
+
+    @RequestMapping("showAllUsers")
+    public String showAllUsers(Model model){
+        model.addAttribute("allUsers",this.controller.getAllUsers());
+        return "allUsers";
     }
 }

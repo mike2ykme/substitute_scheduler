@@ -47,15 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
+                    .antMatchers("/static/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
-                .formLogin();
-//        http
-//            .authorizeRequests()
-//                .antMatchers("/css/**","/index","/").permitAll()
-//                .antMatchers("/user/**").hasRole("USER")
-//        .and()
-//            .formLogin();
+                    .formLogin()
+                .and()
+                    .httpBasic();
+//                .formLogin().and().csrf().disable();
+
     }
 
 //    https://www.harinathk.com/spring/no-passwordencoder-mapped-id-null/

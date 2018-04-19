@@ -1,5 +1,6 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
+import com.icrn.substitutes.Controller;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -17,8 +18,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,6 +28,8 @@ public class TestTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    Controller controller;
     // These test will load the full Spring Application context
     @Test
     @WithMockUser
@@ -66,7 +68,8 @@ public class TestTest {
     public void shouldPostSuccess() throws Exception{
         mockMvc.perform(post("/postIt").with(user("admin").password("admin")).with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("something"));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("something")));
+//                .andExpect(content().string("something"));
 
     }
 
@@ -86,5 +89,15 @@ public class TestTest {
     public void noAccssAnonymous() throws Exception{
         mockMvc.perform(post("/postIt").with(anonymous()))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void showAllUsers() throws Exception{
+        mockMvc.perform(get("/showAllUsers")
+                .with(user("admin").password("password")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("allUsers"))
+                .andExpect(
+                        model().attribute("allUsers",hasItem(controller.getUserById(1).get())));
     }
 }
