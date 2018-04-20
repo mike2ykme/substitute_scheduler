@@ -36,8 +36,6 @@ public class BaseController {
 
     @RequestMapping("/")
     public String index(Model model){
-
-
         return "home";
     }
 
@@ -62,5 +60,10 @@ public class BaseController {
     public String showAllUsers(Model model){
         model.addAttribute("allUsers",this.controller.getAllUsers());
         return "allUsers";
+    }
+
+    @RequestMapping("/a3n/test")
+    public String tester(){
+        return "test";
     }
 }
