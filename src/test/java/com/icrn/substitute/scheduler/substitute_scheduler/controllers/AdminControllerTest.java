@@ -6,14 +6,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -23,26 +24,32 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestTest {
+public class AdminControllerTest {
+
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
+//    @MockBean
     UserDetailsService userDetailsService;
 
     @Autowired
+//    @MockBean
     Controller controller;
+
     // These test will load the full Spring Application context
-    @Test
+
+//    @Test
     @WithMockUser
     public void shouldReturnGreeting() throws Exception {
         this.mockMvc.perform(get("/HelloWorld/"))
                 .andDo(print()).andExpect(status().isOk())
-                        .andExpect(content().string(containsString("Hello World")));
+                .andExpect(content().string(containsString("Hello World")));
     }
 
 //    So it seems that the actual guide written by people who write spring has a lot of issues
@@ -60,17 +67,17 @@ public class TestTest {
 // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test/5.0.4.RELEASE
 
 
-//   Also, this is another page that led me to creating tests
+    //   Also, this is another page that led me to creating tests
 //    https://www.blazemeter.com/blog/spring-boot-rest-api-unit-testing-with-junit
     // https://github.com/spring-projects/spring-security/issues/2807
-    @Test
+//    @Test
     public void stillLearning() throws Exception{
         this.mockMvc.perform(get("/HelloWorld")
-            .with(user("admin").password("admin"))).andExpect(status().isOk()).andExpect(content().string(containsString("Hello World")));
+                .with(user("admin").password("admin"))).andExpect(status().isOk()).andExpect(content().string(containsString("Hello World")));
 
     }
-//    https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
-    @Test
+    //    https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
+//    @Test
     public void shouldPostSuccess() throws Exception{
         mockMvc.perform(post("/postIt").with(user("admin").password("admin")).with(csrf()))
                 .andExpect(status().isOk())
@@ -79,25 +86,25 @@ public class TestTest {
 
     }
 
-    @Test
+//    @Test
     public void expectCorrectPassword() throws Exception{
         mockMvc.perform(formLogin().user("admin").password("admin"))
                 .andExpect(authenticated());
     }
-    @Test
+//    @Test
     public void checkIncorrectPassword() throws Exception{
         mockMvc
                 .perform(formLogin().password("invalid"))
                 .andExpect(unauthenticated());
     }
 
-    @Test
+//    @Test
     public void noAccssAnonymous() throws Exception{
         mockMvc.perform(post("/postIt").with(anonymous()))
                 .andExpect(status().is4xxClientError());
     }
 
-    @Test
+//    @Test
     public void showAllUsers() throws Exception{
         mockMvc.perform(get("/showAllUsers")
 //                .with(user("admin").password("password")))
@@ -109,7 +116,7 @@ public class TestTest {
                         model().attribute("allUsers",hasItem(controller.getUserById(1).get())));
     }
 
-    @Test()
+//    @Test()
     public void verifyAdminRoleAccessDenies() throws Exception{
         ResultActions results = mockMvc.perform(get("/a3n/test")
                 .with(user(userDetailsService.loadUserByUsername("user"))));
@@ -129,10 +136,27 @@ public class TestTest {
                 .andExpect(view().name("test"));
     }
 
-//    @Test()
-//    public void verifyAddUser() throws Exception{
-//        mockMvc.perform(post("/a3n/AddUser").p)
-//    }
+    @Test()
+    public void verifyAddUser() throws Exception{
+
+//        given(this.userDetailsService.loadUserByUsername("admin")).willReturn()
+//        ResultActions results = mockMvc.perform(post("/a3n/AddUser").with(userDetailsService.loadUserByUsername("admin")));
+
+        ResultActions results = mockMvc.perform(
+                        post("/a3n/AddUser")
+                                .with(user(userDetailsService.loadUserByUsername("admin")))
+                                .param("name","Name")
+                                .param("password","123")
+                                .param("contactNumber","1234567890")
+        );
+
+        //.with(user("admin").password("admin")).with(csrf()))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(org.hamcrest.Matchers.containsString("something")));
+//                .andExpect(content().string("something"));
+    }
+//    public void shouldPostSuccess() throws Exception{
+
 
 
 }

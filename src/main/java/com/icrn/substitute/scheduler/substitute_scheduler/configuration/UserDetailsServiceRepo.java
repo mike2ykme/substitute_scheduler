@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserDetailsServiceRepo implements UserDetailsService {
@@ -36,7 +38,15 @@ public class UserDetailsServiceRepo implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return AuthorityUtils.createAuthorityList("ROLE_USER");
+            List<String> formattedRoles = this.getRoles()
+                                            .stream()
+                                            .map(role -> "ROLE_".concat(role))
+                                            .collect(Collectors.toList());
+
+            String[] roles = formattedRoles.toArray(new String[this.getRoles().size()]);
+            return AuthorityUtils.createAuthorityList(roles);
+
+//            return AuthorityUtils.createAuthorityList("ROLE_USER");
         }
 
         @Override
