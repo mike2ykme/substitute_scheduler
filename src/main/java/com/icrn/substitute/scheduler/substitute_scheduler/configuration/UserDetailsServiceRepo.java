@@ -40,7 +40,7 @@ public class UserDetailsServiceRepo implements UserDetailsService {
         public Collection<? extends GrantedAuthority> getAuthorities() {
             List<String> formattedRoles = this.getRoles()
                                             .stream()
-                                            .map(role -> "ROLE_".concat(role))
+                                            .map("ROLE_"::concat)
                                             .collect(Collectors.toList());
 
             String[] roles = formattedRoles.toArray(new String[this.getRoles().size()]);

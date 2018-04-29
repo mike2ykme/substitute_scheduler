@@ -1,5 +1,6 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
+import com.icrn.substitute.scheduler.substitute_scheduler.configuration.UserDetailsServiceRepo;
 import com.icrn.substitutes.Controller;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -35,11 +35,9 @@ public class AdminControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-//    @MockBean
-    UserDetailsService userDetailsService;
+    UserDetailsServiceRepo userDetailsService;
 
     @Autowired
-//    @MockBean
     Controller controller;
 
     // These test will load the full Spring Application context
@@ -70,14 +68,14 @@ public class AdminControllerTest {
     //   Also, this is another page that led me to creating tests
 //    https://www.blazemeter.com/blog/spring-boot-rest-api-unit-testing-with-junit
     // https://github.com/spring-projects/spring-security/issues/2807
-//    @Test
+    @Test
     public void stillLearning() throws Exception{
-        this.mockMvc.perform(get("/HelloWorld")
-                .with(user("admin").password("admin"))).andExpect(status().isOk()).andExpect(content().string(containsString("Hello World")));
+        this.mockMvc.perform(get("/a3n/test")
+                .with(user(userDetailsService.loadUserByUsername("admin"))).with(csrf())).andExpect(status().isOk());//.andExpect(content().string(containsString("Hello World")));
 
     }
     //    https://docs.spring.io/spring-security/site/docs/current/reference/html/test-mockmvc.html
-//    @Test
+    @Test
     public void shouldPostSuccess() throws Exception{
         mockMvc.perform(post("/postIt").with(user("admin").password("admin")).with(csrf()))
                 .andExpect(status().isOk())
@@ -86,7 +84,7 @@ public class AdminControllerTest {
 
     }
 
-//    @Test
+    @Test
     public void expectCorrectPassword() throws Exception{
         mockMvc.perform(formLogin().user("admin").password("admin"))
                 .andExpect(authenticated());
@@ -104,7 +102,7 @@ public class AdminControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
-//    @Test
+    @Test
     public void showAllUsers() throws Exception{
         mockMvc.perform(get("/showAllUsers")
 //                .with(user("admin").password("password")))
@@ -116,7 +114,7 @@ public class AdminControllerTest {
                         model().attribute("allUsers",hasItem(controller.getUserById(1).get())));
     }
 
-//    @Test()
+    @Test()
     public void verifyAdminRoleAccessDenies() throws Exception{
         ResultActions results = mockMvc.perform(get("/a3n/test")
                 .with(user(userDetailsService.loadUserByUsername("user"))));
@@ -126,10 +124,17 @@ public class AdminControllerTest {
 
     }
 
+//    @Test
+//    public void stillLearning() throws Exception{
+//        this.mockMvc.perform(get("/a3n/test")
+//                .with(user("admin").password("admin"))).andExpect(status().isOk());//.andExpect(content().string(containsString("Hello World")));
+//
+//    }
+
     @Test()
     public void verifyAdminRoleAccessAllows() throws Exception{
-        ResultActions results = mockMvc.perform(get("/a3n/test")
-                .with(user(userDetailsService.loadUserByUsername("admin"))));
+        ResultActions results = mockMvc.perform(post("/a3n/test")
+                .with(user(userDetailsService.loadUserByUsername("admin"))).with(csrf()));
 
         results
                 .andExpect(status().isOk())
@@ -144,19 +149,16 @@ public class AdminControllerTest {
 
         ResultActions results = mockMvc.perform(
                         post("/a3n/AddUser")
-                                .with(user(userDetailsService.loadUserByUsername("admin")))
+//                                .with(user(userDetailsService.loadUserByUsername("admin")))
+                                .with(user(userDetailsService.loadUserByUsername("admin"))).with(csrf())
                                 .param("name","Name")
                                 .param("password","123")
                                 .param("contactNumber","1234567890")
         );
 
-        //.with(user("admin").password("admin")).with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(content().string(org.hamcrest.Matchers.containsString("something")));
-//                .andExpect(content().string("something"));
+        results
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("user",is(not(nullValue()))))
+        ;
     }
-//    public void shouldPostSuccess() throws Exception{
-
-
-
 }

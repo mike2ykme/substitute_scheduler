@@ -62,8 +62,8 @@ public class BaseController {
         return "allUsers";
     }
 
-    @RequestMapping("/a3n/test")
-    public String tester(){
-        return "test";
-    }
+//    @RequestMapping("/a3n/test")
+//    public String tester(){
+//        return "test";
+//    }
 }

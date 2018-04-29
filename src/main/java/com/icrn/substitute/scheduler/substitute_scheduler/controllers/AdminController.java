@@ -16,12 +16,24 @@ public class AdminController {
         this.controller = controller;
     }
 
-    @RequestMapping("/users")
-    public String addUser(ExtUser user, Model model){
+//    @RequestMapping(value = "/users", method = RequestMethod.POST)
+//    public String addUser(Model model){
+//        return "dir/test";
+//    }
+
+    @RequestMapping(value = "/AddUser", method = RequestMethod.POST)
+    public String addUser(ExtUser user,Model model){
+        System.out.println(user);
+        model.addAttribute("user",this.controller.saveUser(user));
+        System.out.println(model.asMap().get("user"));
         return "dir/test";
     }
 
-    @RequestMapping(value = "/",method = RequestMethod.POST)
+    @RequestMapping("test")
+    public String test(){
+        return "test";
+    }
+    @RequestMapping(value = "/")
     public String main(){
         return "test";
     }
