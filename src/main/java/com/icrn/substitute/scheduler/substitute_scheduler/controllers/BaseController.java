@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
@@ -62,8 +63,18 @@ public class BaseController {
         return "allUsers";
     }
 
-//    @RequestMapping("/a3n/test")
-//    public String tester(){
-//        return "test";
-//    }
+    @RequestMapping("showAllSubstitutes")
+    public String showAllSubstitutes(Model model){
+        model.addAttribute("allSubstitutes",this.controller.getAllSubstitutes());
+
+        return "allSubstitutes";
+    }
+
+    @RequestMapping("showAllRequests")
+    public String showAllRequests(Model model){
+        model.addAttribute("allRequests",this.controller.getAllRequests());
+
+        return "allRequests";
+    }
+
 }

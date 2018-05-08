@@ -31,6 +31,12 @@ public class ExtUserRepositoryInMemory implements UserRepository {
 //                .findAny();
 //    }
 
+    public Optional<UserInterface> deleteUser(long userId){
+
+        return Optional.ofNullable(this.userMap.remove(userId));
+    }
+
+
     @Override
     public Optional<UserInterface> getUserById(long userId) {
         return this.userMap.entrySet().stream()

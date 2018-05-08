@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,11 +22,15 @@ public class OnlyWebLayerContextTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    PasswordEncoder passwordEncoder;
+
     @Test
     public void load(){
 
     }
-    //The following will fail since we're only loading the web context
+
     @Test
     public void shouldReturnDefaultMessage() throws Exception{
         this.mockMvc.perform(get("/"))
@@ -32,13 +38,5 @@ public class OnlyWebLayerContextTests {
                             .andExpect(status().isOk())
                             .andExpect(content().string(containsString("Hello World")));
     }
-//    //The following will fail since we're only loading the web context
-//    @Test
-//    public void shouldReturnDefaultMessage() throws Exception{
-//        this.mockMvc.perform(get("/HelloWorld"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().string(containsString("Hello World")));
-//    }
 
 }

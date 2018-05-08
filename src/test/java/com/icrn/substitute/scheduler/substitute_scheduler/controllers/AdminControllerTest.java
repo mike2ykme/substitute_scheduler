@@ -1,7 +1,9 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
 import com.icrn.substitute.scheduler.substitute_scheduler.configuration.UserDetailsServiceRepo;
 import com.icrn.substitutes.Controller;
+import com.icrn.substitutes.model.UserInterface;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +82,6 @@ public class AdminControllerTest {
         mockMvc.perform(post("/postIt").with(user("admin").password("admin")).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("something")));
-//                .andExpect(content().string("something"));
 
     }
 
@@ -89,23 +90,10 @@ public class AdminControllerTest {
         mockMvc.perform(formLogin().user("admin").password("admin"))
                 .andExpect(authenticated());
     }
-//    @Test
-    public void checkIncorrectPassword() throws Exception{
-        mockMvc
-                .perform(formLogin().password("invalid"))
-                .andExpect(unauthenticated());
-    }
-
-//    @Test
-    public void noAccssAnonymous() throws Exception{
-        mockMvc.perform(post("/postIt").with(anonymous()))
-                .andExpect(status().is4xxClientError());
-    }
 
     @Test
     public void showAllUsers() throws Exception{
         mockMvc.perform(get("/showAllUsers")
-//                .with(user("admin").password("password")))
                 .with(user(userDetailsService.loadUserByUsername("admin"))))
                 .andExpect(authenticated())
                 .andExpect(status().isOk())
@@ -124,12 +112,6 @@ public class AdminControllerTest {
 
     }
 
-//    @Test
-//    public void stillLearning() throws Exception{
-//        this.mockMvc.perform(get("/a3n/test")
-//                .with(user("admin").password("admin"))).andExpect(status().isOk());//.andExpect(content().string(containsString("Hello World")));
-//
-//    }
 
     @Test()
     public void verifyAdminRoleAccessAllows() throws Exception{
@@ -144,12 +126,9 @@ public class AdminControllerTest {
     @Test()
     public void verifyAddUser() throws Exception{
 
-//        given(this.userDetailsService.loadUserByUsername("admin")).willReturn()
-//        ResultActions results = mockMvc.perform(post("/a3n/AddUser").with(userDetailsService.loadUserByUsername("admin")));
 
         ResultActions results = mockMvc.perform(
                         post("/a3n/AddUser")
-//                                .with(user(userDetailsService.loadUserByUsername("admin")))
                                 .with(user(userDetailsService.loadUserByUsername("admin"))).with(csrf())
                                 .param("name","Name")
                                 .param("password","123")
@@ -158,7 +137,30 @@ public class AdminControllerTest {
 
         results
                 .andExpect(status().isOk())
+                .andExpect(view().name("a3n/added"))
                 .andExpect(model().attribute("user",is(not(nullValue()))))
+                .andExpect(model().attribute("user",hasProperty("name",equalTo("Name"))))
+                .andExpect(model().attribute("user",hasProperty("password",not(equalTo("123")))))
+        ;
+    }
+
+    @Test
+    public void verifyDisableUser() throws Exception{
+        UserInterface user = new ExtUser();
+        user.setId(123);
+        this.controller.saveUser(user);
+
+        ResultActions results = mockMvc.perform(
+                post("/a3n/DisableUser")
+                        .with(user(userDetailsService.loadUserByUsername("admin"))).with(csrf())
+                        .param("userId","123")
+        );
+
+        results
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("action",is("user disabled")))
+                .andExpect(model().attribute("userId",is("123")))
+                .andExpect(view().name("a3n/disabled"))
         ;
     }
 }

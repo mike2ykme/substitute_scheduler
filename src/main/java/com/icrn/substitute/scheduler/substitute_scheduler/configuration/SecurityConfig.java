@@ -20,13 +20,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
         auth
             .userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 //            .inMemoryAuthentication()
 //                .withUser("user")
-//                    .password("{bcrypt}$2a$10$f928v5niYkw56YbQiMlA0OOHVJPqKOjahIfTVtQn/4z9LQzR/E0yq")
+//                    .password("{bcrypt}$2a$10$f928v5niYkw56YbQiMlA0OOHVJPqKOjahIfTVtQn/4z9LQzR/E0yq")  /
 //                    .roles("USER")
 //            .and()
 //                .withUser("admin")
@@ -54,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                 .and()
                     .httpBasic();
-//                .formLogin().and().csrf().disable();
 
     }
 
