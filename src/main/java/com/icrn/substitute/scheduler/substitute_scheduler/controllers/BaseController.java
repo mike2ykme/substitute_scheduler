@@ -1,13 +1,13 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
+import com.icrn.substitute.scheduler.substitute_scheduler.service.RequestValidator;
 import com.icrn.substitutes.Controller;
+import com.icrn.substitutes.Exceptions.SchedulingException;
+import com.icrn.substitutes.model.Request;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -76,5 +76,30 @@ public class BaseController {
 
         return "allRequests";
     }
+    @RequestMapping(value = "createRequest", method = RequestMethod.POST)
+    public String createRequest(Model model,@ModelAttribute("request")Request request){
+        if (!RequestValidator.validateNewRequest(request))
+            throw new RuntimeException("request object is invalid");
 
+        request = this.controller.saveRequest(request);
+        model.addAttribute("request",request);
+        return "request";
+    }
+
+    @PostMapping("/scheduleSubstitute")
+    public String scheduleSubstitute(Model model,@ModelAttribute("request")Request request){
+        if (!RequestValidator.validateUnscheduledRequest(request)) {
+            System.out.println(request);
+            throw new RuntimeException("request object is invalid");
+        }
+        try {
+            request = this.controller.scheduleSubstitute(request);
+            model.addAttribute("status","scheduled");
+            return "request";
+
+        }catch (SchedulingException e){
+            throw new RuntimeException(e);
+        }
+
+    }
 }
