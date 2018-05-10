@@ -131,6 +131,24 @@ public class BaseControllerTest {
     }
 
     @Test
+    public void userPageGenerates() throws Exception{
+        ResultActions results = mockMvc.perform(get("/user/1").with(user(userDetailsService.loadUserByUsername("user"))));
+
+        results
+                .andExpect(view().name("user"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("user",is(this.controller.getUserById(1).get())));
+    }
+
+    @Test
+    public void invalidUserPageGeneratesError() throws Exception{
+        ResultActions results = mockMvc.perform(get("/user/3333333333333").with(user(userDetailsService.loadUserByUsername("user"))));
+
+        results
+                .andExpect(view().name("error"))
+                .andExpect(model().attribute("user",is(not(this.controller.getUserById(1).get()))));
+    }
+    @Test
     public void createRequest() throws Exception{
 
         Request request = new Request();
@@ -226,17 +244,7 @@ public class BaseControllerTest {
                 .andExpect(model().attribute("status","scheduled"))
                 .andExpect(model().attribute("request",is(request1)))
         ;
-//        try{
-////            request = this.controller.scheduleSubstitute(user,substituteList.get(0),notHolidayStart,notHolidayEnd);
-//            request = this.controller.scheduleSubstitute(request1);
-//            assertThat(this.controller.getSubstitutesAvailableOnDateTime(notHolidayStart,notHolidayEnd).isEmpty(),is(true));
-//            assertThat(request,is(not(nullValue())));
-//            System.out.println(request);
-//
-//        }catch (SchedulingException e){
-//            e.printStackTrace();
-//            fail("Should not have thrown an exception");
-//        }
+
     }
 
     //https://aggarwalarpit.wordpress.com/2017/05/17/mocking-spring-security-context-for-unit-testing/

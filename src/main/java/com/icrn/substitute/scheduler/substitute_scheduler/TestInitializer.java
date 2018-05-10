@@ -24,6 +24,7 @@ public class TestInitializer implements SmartInitializingSingleton {
 
         ExtUser admin = new ExtUser();
         admin.setId(1L);
+        admin.setContactNumber("123 123 1234");
 //        admin.addRole("ROLE_ADMIN");
         admin.addRole("ADMIN");
 //        admin.addRole("ROLE_USER");
@@ -37,6 +38,7 @@ public class TestInitializer implements SmartInitializingSingleton {
         user.addRole("USER");
         user.setName("user");
         user.setActive(true);
+        user.setContactNumber("123 123 1234");
         user.setPassword("{bcrypt}$2a$10$f928v5niYkw56YbQiMlA0OOHVJPqKOjahIfTVtQn/4z9LQzR/E0yq");
 
         ExtUser disabledUser = new ExtUser();

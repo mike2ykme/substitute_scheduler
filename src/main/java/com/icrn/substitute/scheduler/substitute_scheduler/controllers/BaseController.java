@@ -5,12 +5,16 @@ import com.icrn.substitute.scheduler.substitute_scheduler.service.RequestValidat
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.Exceptions.SchedulingException;
 import com.icrn.substitutes.model.Request;
+import com.icrn.substitutes.model.User;
+import com.icrn.substitutes.model.UserInterface;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 //@RestController
@@ -59,10 +63,20 @@ public class BaseController {
 
     @RequestMapping("showAllUsers")
     public String showAllUsers(Model model){
+        this.controller.getAllUsers().forEach(System.out::println);
         model.addAttribute("allUsers",this.controller.getAllUsers());
         return "allUsers";
     }
 
+    @RequestMapping("user/{id}")
+    public String showUserById(@PathVariable("id")long id, Model model, HttpServletRequest request){
+        Optional<UserInterface> user = this.controller.getUserById(id);
+        if(user.isPresent()){
+            model.addAttribute("user",this.controller.getUserById(id).get());
+            return "user";
+        }
+        return "error";
+    }
     @RequestMapping("showAllSubstitutes")
     public String showAllSubstitutes(Model model){
         model.addAttribute("allSubstitutes",this.controller.getAllSubstitutes());
@@ -95,9 +109,12 @@ public class BaseController {
         try {
             request = this.controller.scheduleSubstitute(request);
             model.addAttribute("status","scheduled");
+            model.addAttribute("request",request);
             return "request";
 
         }catch (SchedulingException e){
+            model.addAttribute("error","Unable to schedule substitute");
+            model.addAttribute("request",request);
             throw new RuntimeException(e);
         }
 
