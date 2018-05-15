@@ -5,11 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>All Users</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <div th:replace="fragments/scripts :: stylesheet">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
+              <!--integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
+              <!--crossorigin="anonymous">-->
+    </div>
+
 </head>
 <body>
 <!--https://www.thymeleaf.org/doc/articles/layouts.html-->
@@ -34,7 +35,7 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2"> </div>
+        <div class="col-md-2"></div>
         <div class="col-sm6 col-md-6 col-sm-offset-2 col-md-offset-2">
             <table class="table table-striped table-hover">
                 <thead>
@@ -74,6 +75,11 @@
             </div>
         </div>
     </div>
+</div>
+<div th:replace="fragments/scripts :: scripts">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </div>
 </body>
 </html>
