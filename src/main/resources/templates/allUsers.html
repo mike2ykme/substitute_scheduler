@@ -5,20 +5,17 @@
 <head>
     <meta charset="UTF-8">
     <title>All Users</title>
-    <div th:replace="fragments/scripts :: stylesheet">
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
-              <!--integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
-              <!--crossorigin="anonymous">-->
-    </div>
+    <br th:replace="fragments/base :: styles" th:remove="tag">
 
 </head>
 <body>
 <!--https://www.thymeleaf.org/doc/articles/layouts.html-->
-<div th:replace="fragments/header :: header">
+<div th:replace="fragments/base :: header">
+<!--<div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'header-admin' : 'header'">-->
     <!-- ============================================================================ -->
     <!-- This content is only used for static prototyping purposes (natural templates)-->
     <!-- and is therefore entirely optional, as this markup fragment will be included -->
-    <!-- from "fragments/header.html" at runtime.                                     -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
     <!-- ============================================================================ -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -49,19 +46,19 @@
                 <!--https://www.thymeleaf.org/doc/articles/springmvcaccessdata.html-->
                 <tr th:each="user : ${allUsers}">
                     <td><a th:href="@{'/' + 'user' + '/' + ${user.id}}" th:text="${user.id}">123456789L</a></td>
-                    <td th:text="${user.name}">Name</a></td>
-                    <td th:text="${user.contactNumber}">(123) 456 - 7890</td>
+                    <td><a th:href="@{'/' + 'user' + '/' + ${user.id}}" th:text="${user.name}">Name</a></td>
+                    <td><a th:href="@{'/' + 'user' + '/' + ${user.id}}"th:text="${user.contactNumber}">(123) 456 - 7890</a></td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
 <!--https://www.thymeleaf.org/doc/articles/layouts.html-->
-<div th:replace="fragments/footer :: footer">
+<div th:replace="fragments/base :: footer">
     <!-- ============================================================================ -->
     <!-- This content is only used for static prototyping purposes (natural templates)-->
     <!-- and is therefore entirely optional, as this markup fragment will be included -->
-    <!-- from "fragments/header.html" at runtime.                                     -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
     <!-- ============================================================================ -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -76,10 +73,11 @@
         </div>
     </div>
 </div>
-<div th:replace="fragments/scripts :: scripts">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-</div>
+<!--<div th:replace="fragments/base :: scripts">-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+<!--</div>-->
+<br th:replace="fragments/base :: scripts">
 </body>
 </html>

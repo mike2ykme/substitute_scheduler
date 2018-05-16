@@ -5,7 +5,6 @@ import com.icrn.substitute.scheduler.substitute_scheduler.service.RequestValidat
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.Exceptions.SchedulingException;
 import com.icrn.substitutes.model.Request;
-import com.icrn.substitutes.model.User;
 import com.icrn.substitutes.model.UserInterface;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
@@ -119,4 +118,19 @@ public class BaseController {
         }
 
     }
+
+//    @ModelAttribute("currentUser")
+//    public void getCurrentUser(@AuthenticationPrincipal CurrentUser currentUser){
+//        return; (curr)
+//
+////        try {
+////            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+////            System.out.println("T");System.out.println("T");System.out.println("T");System.out.println("T");System.out.println("T");
+////            System.out.println(auth.getAuthorities());
+////            System.out.println("T");System.out.println("T");System.out.println("T");System.out.println("T");System.out.println("T");
+////            model.addAttribute("loggedIn",principal);
+////        } catch (Exception ex) {
+////
+////        }
+//    }
 }
