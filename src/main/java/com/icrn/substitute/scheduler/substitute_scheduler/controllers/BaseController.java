@@ -71,7 +71,9 @@ public class BaseController {
     public String showUserById(@PathVariable("id")long id, Model model, HttpServletRequest request){
         Optional<UserInterface> user = this.controller.getUserById(id);
         if(user.isPresent()){
-            model.addAttribute("user",this.controller.getUserById(id).get());
+            ExtUser user1 = (ExtUser) user.get();
+            user1.setPassword("");
+            model.addAttribute("user",user1);
             return "user";
         }
         return "error";

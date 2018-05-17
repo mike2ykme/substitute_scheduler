@@ -5,8 +5,191 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="'User: ' + ${user.name}">User: Name</title>
+
+    <div th:replace="fragments/base :: styles" th:remove="tag">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+        <style>
+            /*https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
+            /* Sticky footer styles
+    -------------------------------------------------- */
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px;
+            }
+
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                line-height: 60px; /* Vertically center the text there */
+                background-color: #f5f5f5;
+            }
+
+            /* Custom page CSS
+            -------------------------------------------------- */
+            /* Not required for template or sticky footer method. */
+
+            body > .container {
+                padding: 60px 15px 0;
+            }
+
+            .footer > .container {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            code {
+                font-size: 80%;
+            }
+        </style>
+    </div>
+
 </head>
 <body>
+<div th:replace="fragments/base :: header">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static header</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="container">
+    <span style="color:red" th:if="${msg != null && msg != null}" th:text="${msg}">Message</span>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            <form class="form-horizontal" th:action="@{/a3n/SaveUser}" action="#" method="post" th:object="${user}">
+                <div class="form-group">
+                    <label for="UserId" class="control-label col-xs-4">User ID:</label>
+                    <div class="col-xs-8">
+                        <input id="UserId"
+                               readonly="readonly"
+                               name="UserId"
+                               placeholder="ID#"
+                               type="text"
+                               class="form-control"
+                               th:field="*{id}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="text" class="control-label col-xs-4">Name:</label>
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </div>
+                            <input id="text"
+                                   name="text"
+                                   placeholder="Name"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{name}"
+                                   th:value="${user.name}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="text" class="control-label col-xs-4">Password:</label>
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </div>
+                            <input id="password"
+                                   name="text"
+                                   placeholder="password"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{password}"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber" class="control-label col-xs-4">Contact Number:</label>
+                    <div class="col-xs-8">
+                        <input id="contactNumber"
+                               name="contactNumber"
+                               placeholder="123-123-1234"
+                               type="text"
+                               class="form-control"
+                               th:field="*{contactNumber}"
+                               th:value="${user.contactNumber}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="control-label col-xs-4">Address:</label>
+                    <div class="col-xs-8">
+                        <textarea id="address" name="address" cols="40" rows="3" class="form-control"
+                                  th:value="${user.address}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userActive" class="control-label col-xs-4">Active</label>
+                    <div class="col-xs-8">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"
+                                   name="userActive"
+                                   value="Active"
+                                   th:field="*{active}"
+                                   th:checked="${user.active}"/>
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xs-offset-4 col-xs-8">
+                        <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                <input
+                        type="hidden"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"/>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/base :: footer">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static FOOTER</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<br th:replace="fragments/base :: scripts">
 </body>
 </html>

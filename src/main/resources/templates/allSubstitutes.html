@@ -1,10 +1,78 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>All Substitutes</title>
+    <br th:replace="fragments/base :: styles" th:remove="tag">
+
 </head>
 <body>
-
+<!--https://www.thymeleaf.org/doc/articles/layouts.html-->
+<div th:replace="fragments/base :: header">
+    <!--<div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'header-admin' : 'header'">-->
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static header</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="container-fluid">-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-2"></div>-->
+        <!--<div class="col-sm6 col-md-6 col-sm-offset-2 col-md-offset-2">-->
+            <!--<table class="table table-striped table-hover">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<td>ID</td>-->
+                    <!--<td>NAME</td>-->
+                    <!--<td>Phone #</td>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--&lt;!&ndash;https://stackoverflow.com/questions/44743317/how-to-create-a-dynamic-link-with-thymeleaf-and-spring-boot&ndash;&gt;-->
+                <!--&lt;!&ndash;https://www.thymeleaf.org/doc/articles/springmvcaccessdata.html&ndash;&gt;-->
+                <!--<tr th:each="user : ${allUsers}">-->
+                    <!--<td><a th:href="@{'/' + 'user' + '/' + ${user.id}}" th:text="${user.id}">123456789L</a></td>-->
+                    <!--<td><a th:href="@{'/' + 'user' + '/' + ${user.id}}" th:text="${user.name}">Name</a></td>-->
+                    <!--<td><a th:href="@{'/' + 'user' + '/' + ${user.id}}"th:text="${user.contactNumber}">(123) 456 - 7890</a></td>-->
+                <!--</tr>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--https://www.thymeleaf.org/doc/articles/layouts.html-->
+<div th:replace="fragments/base :: footer">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static FOOTER</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<br th:replace="fragments/base :: scripts">
 </body>
 </html>
