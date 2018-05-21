@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Substitute: ' + ${substitute.name}">User: Name</title>
+
+    <div th:replace="fragments/base :: styles" th:remove="tag">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+        <style>
+            /*https://getbootstrap.com/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css*/
+            /* Sticky footer styles
+    -------------------------------------------------- */
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+
+            body {
+                /* Margin bottom by footer height */
+                margin-bottom: 60px;
+            }
+
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                /* Set the fixed height of the footer here */
+                height: 60px;
+                line-height: 60px; /* Vertically center the text there */
+                background-color: #f5f5f5;
+            }
+
+            /* Custom page CSS
+            -------------------------------------------------- */
+            /* Not required for template or sticky footer method. */
+
+            body > .container {
+                padding: 60px 15px 0;
+            }
+
+            .footer > .container {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            code {
+                font-size: 80%;
+            }
+        </style>
+    </div>
+
+</head>
+<body>
+<div th:replace="fragments/base :: header">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static header</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <span style="color:red" th:if="${msg != null && msg != null}" th:text="${msg}">Message</span>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            <form class="form-horizontal" th:action="@{/a3n/SaveSubstitute}" action="#" method="post"
+                  th:object="${substitute}">
+                <div class="form-group">
+                    <label for="UserId" class="control-label col-xs-4">User ID:</label>
+                    <div class="col-xs-8">
+                        <input id="UserId"
+                               readonly="readonly"
+                               name="UserId"
+                               placeholder="ID#"
+                               type="text"
+                               class="form-control"
+                               th:field="*{id}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="text" class="control-label col-xs-4">Name:</label>
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-address-card"></i>
+                            </div>
+                            <input id="text"
+                                   name="text"
+                                   placeholder="Name"
+                                   type="text"
+                                   class="form-control"
+                                   th:field="*{name}"
+                                   th:value="${substitute.name}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="holidays" class="control-label col-xs-4">Holidays Taken</label>
+                    <div class="col-xs-8">
+                        <select
+                                id="holidays"
+                                name="select"
+                                class="select form-control"
+                                multiple="multiple"
+                                readonly
+                                th:field="*{holidaysTaken}"
+                                th:each="holiday : ${substitute.holidaysTaken}">
+                            <option th:value="${holiday}" th:text="${holiday}" value="01-30-1986">01-30-1986</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduledDays" class="control-label col-xs-4">Scheduled Activity</label>
+                    <div class="col-xs-8">
+                        <select
+                                id="scheduledDays"
+                                name="select"
+                                class="select form-control"
+                                multiple="multiple"
+                                readonly
+                                th:field="*{scheduledDays}"
+                                th:each="scheduled :${substitute.scheduledDays}">
+                            <option th:value="${scheduled}" th:text="${scheduled}" value="01-30-1986">01-30-1986
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Sunday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{sunStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{sunEnd}">
+                        </div>
+                    </div>
+                    <label>Monday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{monStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{monEnd}">
+                        </div>
+                    </div>
+                    <label>Tuesday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{tueStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{tueEnd}">
+                        </div>
+                    </div>
+                    <label>Wednesday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{wedStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{wedEnd}">
+                        </div>
+                    </div>
+                    <label>Thursday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{thuStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{thuEnd}">
+                        </div>
+                        <hr>
+                    </div>
+                    <label>Friday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{friStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{friEnd}">
+                        </div>
+                        <hr>
+                    </div>
+                    <label>Saturday</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>START</label>
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Start"
+                                    th:field="*{satStart}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>END</label>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="End"
+                                   th:field="*{satEnd}">
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+                <!--<div th:field="*{regularAvailability.mapAvailability}"-->
+                <!--th:each="availability : ${substitute.regularAvailability.getMapAvailability()}">-->
+                <!--<label  th:for="${availability.key}" th:text="${availability}">0</label>-->
+                <!--<div class="form-row">-->
+                <!--<div class="form-group col-md-6">-->
+                <!--<label th:for="'Start' + ${availability.key}">START</label>-->
+                <!--<input-->
+                <!--type="text"-->
+                <!--class="form-control"-->
+                <!--th:id="'Start' + ${availability.key}"-->
+                <!--placeholder="Start"-->
+                <!--th:value="${availability.value.start}">-->
+                <!--</div>-->
+                <!--<div class="form-group col-md-6">-->
+                <!--<label th:for="'End' + ${availability.key}">END</label>-->
+                <!--<input type="text"-->
+                <!--class="form-control"-->
+                <!--th:id="'End' + ${availability.key}"-->
+                <!--placeholder="End"-->
+                <!--th:value="${availability.value.end}">-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+
+
+                <div class="form-group">
+                    <label for="contactNumber" class="control-label col-xs-4">Contact Number:</label>
+                    <div class="col-xs-8">
+                        <input id="contactNumber"
+                               name="contactNumber"
+                               placeholder="123-123-1234"
+                               type="text"
+                               class="form-control"
+                               th:field="*{contactNumber}"
+                               th:value="${substitute.contactNumber}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="control-label col-xs-4">Address:</label>
+                    <div class="col-xs-8">
+                        <textarea id="address" name="address" cols="40" rows="3" class="form-control"
+                                  th:field="*{address}"
+                                  th:value="${substitute.address}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xs-offset-4 col-xs-8">
+                        <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                <input
+                        type="hidden"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"/>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/base :: footer">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/base.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static FOOTER</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<br th:replace="fragments/base :: scripts">
+</body>
+</html>

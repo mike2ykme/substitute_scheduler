@@ -1,10 +1,12 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.SubWrapper;
 import com.icrn.substitute.scheduler.substitute_scheduler.service.RequestValidator;
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.Exceptions.SchedulingException;
 import com.icrn.substitutes.model.Request;
+import com.icrn.substitutes.model.Substitute;
 import com.icrn.substitutes.model.UserInterface;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
@@ -83,6 +85,24 @@ public class BaseController {
         model.addAttribute("allSubstitutes",this.controller.getAllSubstitutes());
 
         return "allSubstitutes";
+    }
+    @RequestMapping("substitute/{id}")
+    public String showSubstituteById(@PathVariable("id")long id, Model model, HttpServletRequest request){
+        Optional<Substitute> optSub = this.controller.getSubstituteById(id);
+        if (optSub.isPresent()){
+            Substitute substitute = optSub.get();
+            SubWrapper wrapper = SubWrapper.getWrapperFromSubstitute(substitute);
+            model.addAttribute("substitute",wrapper);
+            System.out.println("SUBSTITUTE");
+            System.out.println(substitute);
+            System.out.println("WRAPPER");
+            System.out.println(wrapper);
+
+            return "substitute";
+        }
+//        model.addAttribute("allSubstitutes",this.controller.getAllSubstitutes());
+
+        return "redirect:error";
     }
 
     @RequestMapping("showAllRequests")

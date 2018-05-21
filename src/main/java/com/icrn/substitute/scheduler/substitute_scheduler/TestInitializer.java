@@ -3,9 +3,18 @@ package com.icrn.substitute.scheduler.substitute_scheduler;
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
 import com.icrn.substitute.scheduler.substitute_scheduler.dao.MongoUserRepository;
 import com.icrn.substitutes.Controller;
+import com.icrn.substitutes.model.Availability;
+import com.icrn.substitutes.model.AvailabilitySet;
+import com.icrn.substitutes.model.StartEnd;
+import com.icrn.substitutes.model.Substitute;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 
 @Component
 public class TestInitializer implements SmartInitializingSingleton {
@@ -48,6 +57,31 @@ public class TestInitializer implements SmartInitializingSingleton {
         disabledUser.setActive(false);
         disabledUser.setPassword("{bcrypt}$2a$10$f928v5niYkw56YbQiMlA0OOHVJPqKOjahIfTVtQn/4z9LQzR/E0yq");
 
+
+
+        AvailabilitySet availabilitySet = new AvailabilitySet();
+        Availability availability = new Availability();
+        LocalDateTime aHoliday = LocalDateTime.of(2011,11,
+                11,11,11);
+        LocalDateTime notHolidayStart = LocalDateTime.of(2018,4,5,9,0);
+        LocalDateTime notHolidayEnd = LocalDateTime.of(2018,4,5,17,0);
+        availabilitySet.addDay(LocalDate.of(2011,11,11));
+        for(int i=0; i <=5;i++){
+            availability.addAvailabilityTime(i,new StartEnd(LocalTime.of(5,0),
+                    LocalTime.of(17,0)));
+        }
+
+        Substitute sub = new Substitute();
+        sub.setId(1234567l);
+        sub.setName("tester");
+        sub.setAddress("123 Fake Street");
+        sub.setContactNumber("1234567890");
+
+        sub.setHolidayAvailability(availabilitySet);
+        sub.setRegularAvailability(availability);
+
+        sub.setScheduledTimes(new AvailabilitySet(new HashSet<>()));
+        this.controller.saveSubstitute(sub);
         this.controller.saveUser(admin);
         this.controller.saveUser(user);
         this.controller.saveUser(disabledUser);

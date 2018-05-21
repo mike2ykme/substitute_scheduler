@@ -1,8 +1,10 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.SubWrapper;
 import com.icrn.substitute.scheduler.substitute_scheduler.dao.ExtUserRepositoryInMemory;
 import com.icrn.substitutes.Controller;
+import com.icrn.substitutes.model.Substitute;
 import com.icrn.substitutes.model.UserInterface;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -73,6 +75,16 @@ public class AdminController {
 //            throw new RuntimeException("No user found in DB with id"+user.getId());
         redirectAttrs.addAttribute("errorMsg","Unable to find user listed in DB");
         return "redirect:error";
+    }
+
+    @RequestMapping(value="/SaveSubstitute",method = RequestMethod.POST)
+    public String addSubstitute(SubWrapper substitute, Model model){
+        System.out.println("TTTTTTTTT");
+        System.out.println(substitute);
+        System.out.println(substitute.getSubstituteFromWrapper());
+        System.out.println("TTTTTTTTT");
+        model.addAttribute("substitute",substitute);
+        return "home";
     }
 
     @RequestMapping(value = "DisableUser", method = RequestMethod.POST)
