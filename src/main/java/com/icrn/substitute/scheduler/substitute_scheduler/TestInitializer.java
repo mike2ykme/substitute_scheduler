@@ -79,8 +79,19 @@ public class TestInitializer implements SmartInitializingSingleton {
 
         sub.setHolidayAvailability(availabilitySet);
         sub.setRegularAvailability(availability);
-
         sub.setScheduledTimes(new AvailabilitySet(new HashSet<>()));
+
+
+        Substitute sub2 = new Substitute();
+        sub2.setId(23456789);
+        sub2.setName("SUB2");
+        sub2.setAddress("321 Fake Street");
+        sub2.setContactNumber("2345678901");
+        sub2.setHolidayAvailability(availabilitySet);
+        sub2.setRegularAvailability(availability);
+        sub2.setScheduledTimes(new AvailabilitySet(new HashSet<>()));
+
+        this.controller.saveSubstitute(sub2);
         this.controller.saveSubstitute(sub);
         this.controller.saveUser(admin);
         this.controller.saveUser(user);

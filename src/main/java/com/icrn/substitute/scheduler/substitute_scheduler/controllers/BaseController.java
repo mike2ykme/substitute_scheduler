@@ -1,19 +1,24 @@
 package com.icrn.substitute.scheduler.substitute_scheduler.controllers;
 
+import com.icrn.substitute.scheduler.substitute_scheduler.Domain.DateWrapper;
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.ExtUser;
 import com.icrn.substitute.scheduler.substitute_scheduler.Domain.SubWrapper;
+import com.icrn.substitute.scheduler.substitute_scheduler.configuration.UserDetailsServiceRepo;
 import com.icrn.substitute.scheduler.substitute_scheduler.service.RequestValidator;
 import com.icrn.substitutes.Controller;
 import com.icrn.substitutes.Exceptions.SchedulingException;
 import com.icrn.substitutes.model.Request;
 import com.icrn.substitutes.model.Substitute;
 import com.icrn.substitutes.model.UserInterface;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,11 +30,13 @@ public class BaseController {
 
     Controller controller;
     PasswordEncoder passwordEncoder;
+    UserDetailsServiceRepo userDetailsServiceRepo;
 
 
-    public BaseController(Controller controller, PasswordEncoder passwordEncoder) {
+    public BaseController(Controller controller, PasswordEncoder passwordEncoder, UserDetailsServiceRepo userDetailsServiceRepo) {
         this.controller = controller;
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsServiceRepo = userDetailsServiceRepo;
     }
 
 
@@ -110,6 +117,47 @@ public class BaseController {
         model.addAttribute("allRequests",this.controller.getAllRequests());
 
         return "allRequests";
+    }
+    @RequestMapping("requestSelectSubstitute/{id}")
+    public String selectUserForRequest(Model model, DateWrapper dateWrapper, @PathVariable("id")long id, @AuthenticationPrincipal UserDetails currentUser){
+        Optional<Substitute> optSub = this.controller.getSubstituteById(id);
+        if (optSub.isPresent()){
+            System.out.println("INSIDE requestSelectSubstitute/{id}");
+            Request request1 = new Request();
+            request1.setStartTime(LocalDateTime.of(dateWrapper.getStartDay(),dateWrapper.getStartTime()));
+            request1.setEndTime(LocalDateTime.of(dateWrapper.getStartDay(),dateWrapper.getEndTime()));
+            request1.setSubstituteId(optSub.get().getId());
+            ExtUser user = (ExtUser) this.userDetailsServiceRepo.loadUserByUsername(currentUser.getUsername());
+            System.out.println(user);
+            request1.setRequestorId(user.getId());
+            try{
+                Request requestScheduled = this.controller.scheduleSubstitute(request1);
+                System.out.println(requestScheduled);
+            }catch (SchedulingException e){
+                System.out.println(e);
+                throw new RuntimeException(e);
+            }
+
+            return "userScheduled";
+        }
+        return "error";
+    }
+
+    @RequestMapping(value = "newRequestStart")
+    public String getRequestForm(Model model){
+        model.addAttribute("time", DateWrapper.dateWrapperNow());
+        return "requestStart";
+    }
+
+    @RequestMapping(value = "requestAvailableSubstitutes", method =RequestMethod.POST)
+    public String getAvailableSubstitutes(Model model, DateWrapper dateWrapper){
+        System.out.println(dateWrapper);
+        LocalDateTime start = LocalDateTime.of(dateWrapper.getStartDay(),dateWrapper.getStartTime());
+        LocalDateTime end = LocalDateTime.of(dateWrapper.getStartDay(),dateWrapper.getEndTime());
+        System.out.println(this.controller.getSubstitutesAvailableOnDateTime(start,end));
+        model.addAttribute("allSubstitutes",this.controller.getSubstitutesAvailableOnDateTime(start,end));
+        model.addAttribute("selectedDate",dateWrapper);
+        return "requestAvailableSubstitutes";
     }
     @RequestMapping(value = "createRequest", method = RequestMethod.POST)
     public String createRequest(Model model,@ModelAttribute("request")Request request){
