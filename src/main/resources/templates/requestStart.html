@@ -75,21 +75,45 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <form class="form-horizontal" th:action="@{requestAvailableSubstitutes}" action="#" method="post" th:object="${time}">
-                <input type="text" id="date" th:field="*{startDay}" />
-                <input type="text" id="startTime" th:field="*{startTime}" />
-                <input type="text" id="endTime" th:field="*{endTime}"/>
+            <!--<form class="form-horizontal" th:action="@{requestAvailableSubstitutes}" action="#" method="post" th:object="${time}">-->
+                <!--<input type="text" id="date" th:field="*{startDay}" />-->
+                <!--<input type="text" id="startTime" th:field="*{startTime}" />-->
+                <!--<input type="text" id="endTime" th:field="*{endTime}"/>-->
 
-                <input type="submit" value="submit" />
-            </form>
+                <!--<input type="submit" value="submit" />-->
+            <!--</form>-->
             <!--<form th:action="@{/requestAvailableSubstitutes}" action="#" method="post">-->
                 <!--<input type="text" id="abc" >-->
 
                 <!--<input type="submit" value="submit">-->
             <!--</form>-->
-        </div>
-    </div>
+
+
+        <form class="form-horizontal" th:action="@{requestAvailableSubstitutes}" action="#" method="post" th:object="${time}">
+            <div class="form-group">
+                <label for="requestDay" class="control-label col-xs-4">Day of Request:</label>
+                <div class="col-xs-8">
+                    <input id="requestDay" name="requestDay" placeholder="DD/MM/YY" type="text" class="form-control" th:field="*{startDay}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startTime" class="control-label col-xs-4">Start Time:</label>
+                <div class="col-xs-8">
+                    <input id="startTime" name="startTime" placeholder="HH:MM AM/PM" type="text" class="form-control" th:field="*{startTime}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endTime" class="control-label col-xs-4">End Time:</label>
+                <div class="col-xs-8">
+                    <input id="endTime" name="endTime" placeholder="HH:MM AM/PM" type="text" class="form-control" th:field="*{endTime}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-offset-4 col-xs-8">
+                    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
 
 </div>
 <div th:replace="fragments/base :: footer">

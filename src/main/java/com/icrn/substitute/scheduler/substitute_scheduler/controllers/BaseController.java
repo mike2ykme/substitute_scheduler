@@ -135,6 +135,7 @@ public class BaseController {
                 System.out.println(requestScheduled);
                 model.addAttribute("request",requestScheduled);
                 model.addAttribute("substitute",this.controller.getSubstituteById(requestScheduled.getSubstituteId()).get());
+                model.addAttribute("requester",user);
             }catch (SchedulingException e){
                 System.out.println(e);
                 throw new RuntimeException(e);

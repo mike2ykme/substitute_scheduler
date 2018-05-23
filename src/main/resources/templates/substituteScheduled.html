@@ -74,60 +74,101 @@
     </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-2"><h1>Substitute Scheduled!</h1></div>
-    </div>
-    <div class="row">
-        <div class="col-md-2">label<input type="text" th:value="${substitute.name}" readonly></div>
-    </div>
-    <div class="row">
         <form>
             <div class="form-group row">
                 <label for="requestId" class="col-4 col-form-label">Request Id</label>
                 <div class="col-8">
-                    <input id="requestId" name="requestId" placeholder="ID#" type="text" class="form-control here">
+                    <input id="requestId"
+                           name="requestId"
+                           placeholder="ID#"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${request.requestId}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="substituteId" class="col-4 col-form-label">Substitute Id:</label>
                 <div class="col-8">
-                    <input id="substituteId" name="substituteId" placeholder="ID#" type="text" class="form-control here">
+                    <input id="substituteId"
+                           name="substituteId"
+                           placeholder="ID#"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${substitute.id}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="subName" class="col-4 col-form-label">Substitute Name</label>
                 <div class="col-8">
-                    <input id="subName" name="subName" placeholder="Name" type="text" class="form-control here">
+                    <input id="subName"
+                           name="subName"
+                           placeholder="Name"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${substitute.name}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="requestorId" class="col-4 col-form-label">Requestor Id:</label>
                 <div class="col-8">
-                    <input id="requestorId" name="requestorId" placeholder="ID#" type="text" class="form-control here">
+                    <input id="requestorId"
+                           name="requestorId"
+                           placeholder="ID#"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${requester.id}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="requestorName:" class="col-4 col-form-label">Requestor Name:</label>
                 <div class="col-8">
-                    <input id="requestorName:" name="requestorName:" placeholder="Name" type="text" class="form-control here">
+                    <input id="requestorName:"
+                           name="requestorName:"
+                           placeholder="Name"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${requester.name}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="requestStatus" class="col-4 col-form-label">status::</label>
                 <div class="col-8">
-                    <input id="requestStatus" name="requestStatus" placeholder="STATUS" type="text" class="form-control here">
+                    <input id="requestStatus"
+                           name="requestStatus"
+                           placeholder="STATUS"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${request.status.toString()}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="startTime" class="col-4 col-form-label">Start Time</label>
                 <div class="col-8">
-                    <input id="startTime" name="startTime" placeholder="TIME START" type="text" class="form-control here">
+                    <input id="startTime"
+                           name="startTime"
+                           placeholder="TIME START"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${request.startTime.toString()}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="endTime" class="col-4 col-form-label">End Time</label>
                 <div class="col-8">
-                    <input id="endTime" name="endTime" placeholder="END TIME" type="text" class="form-control here">
+                    <input id="endTime"
+                           name="endTime"
+                           placeholder="END TIME"
+                           type="text"
+                           class="form-control here"
+                           readonly
+                           th:value="${request.endTime.toString()}"/>
                 </div>
             </div>
             <div class="form-group row">
